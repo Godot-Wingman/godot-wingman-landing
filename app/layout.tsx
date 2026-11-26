@@ -18,7 +18,6 @@ export const metadata: Metadata = {
   title: "Godot Wingman",
   description:
     "A free MCP server that lets your AI app use the Godot editor: build scenes, write scripts, run and play the game.",
-  robots: { index: false, follow: false },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

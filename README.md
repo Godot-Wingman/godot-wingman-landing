@@ -1,6 +1,6 @@
 # Godot Wingman landing page
 
-The website of [Godot Wingman](https://github.com/Albis0/godot-wingman), served by Cloudflare Pages at
+The website of [Godot Wingman](https://github.com/Godot-wingman/godot-wingman), served by Cloudflare Pages at
 https://godot-wingman.pages.dev. Next.js, exported as static files; no server, no tracking.
 
 - `bun install`, then `bun run dev` and open http://localhost:3000
