@@ -5,7 +5,7 @@
 import { siClaude, siGithubcopilot, siOpenai } from "simple-icons";
 
 export const VERSION = "0.4.2";
-export const REPOSITORY_URL = "https://github.com/Godot-wingman/godot-wingman";
+export const REPOSITORY_URL = "https://github.com/Godot-Wingman/godot-wingman";
 export const INSTALL_GUIDE_URL = `${REPOSITORY_URL}/blob/main/docs/INSTALL.md`;
 export const CHANGELOG_URL = `${REPOSITORY_URL}/blob/main/CHANGELOG.md`;
 
@@ -172,14 +172,14 @@ export const INSTALL_COMMANDS = {
     label: "Windows",
     shell: "PowerShell",
     command:
-      "irm https://raw.githubusercontent.com/Godot-wingman/godot-wingman/main/install/install.ps1 | iex",
+      "irm https://raw.githubusercontent.com/Godot-Wingman/godot-wingman/main/install/install.ps1 | iex",
     place: "Installs to %LOCALAPPDATA%\\Programs\\godot-wingman and adds it to your PATH.",
   },
   unix: {
     label: "macOS and Linux",
     shell: "Terminal",
     command:
-      "curl -fsSL https://raw.githubusercontent.com/Godot-wingman/godot-wingman/main/install/install.sh | sh",
+      "curl -fsSL https://raw.githubusercontent.com/Godot-Wingman/godot-wingman/main/install/install.sh | sh",
     place: "Installs to ~/.local/bin/godot-wingman.",
   },
 } as const;

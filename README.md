@@ -5,12 +5,12 @@
 <h1 align="center">Godot Wingman website</h1>
 
 <p align="center">
-  The landing page of <a href="https://github.com/Godot-wingman/godot-wingman">Godot Wingman</a>, live at
+  The landing page of <a href="https://github.com/Godot-Wingman/godot-wingman">Godot Wingman</a>, live at
   <a href="https://godot-wingman.pages.dev"><b>godot-wingman.pages.dev</b></a>.
 </p>
 
 <p align="center">
-  <a href="https://github.com/Godot-wingman/godot-wingman-landing/actions/workflows/deploy.yml"><img alt="Deploy" src="https://github.com/Godot-wingman/godot-wingman-landing/actions/workflows/deploy.yml/badge.svg"></a>
+  <a href="https://github.com/Godot-Wingman/godot-wingman-landing/actions/workflows/deploy.yml"><img alt="Deploy" src="https://github.com/Godot-Wingman/godot-wingman-landing/actions/workflows/deploy.yml/badge.svg"></a>
   <img alt="Next.js 16" src="https://img.shields.io/badge/Next.js-16-000?style=flat-square&logo=nextdotjs">
   <img alt="Cloudflare Pages" src="https://img.shields.io/badge/Cloudflare-Pages-f38020?style=flat-square&logo=cloudflare&logoColor=white">
   <img alt="No tracking" src="https://img.shields.io/badge/tracking-none-2ea043?style=flat-square">
@@ -36,7 +36,7 @@ Every push to `main` builds the site and uploads it to Cloudflare Pages
 
 ## Rules for the content
 
-- Every statement on the page must match the [Godot Wingman README](https://github.com/Godot-wingman/godot-wingman#readme).
+- Every statement on the page must match the [Godot Wingman README](https://github.com/Godot-Wingman/godot-wingman#readme).
 - The screenshots in `public/images` are real: they were taken through Godot Wingman's own tools.
 
 ## Credits
