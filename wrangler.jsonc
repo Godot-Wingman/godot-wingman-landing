@@ -1,7 +1,7 @@
 // Cloudflare Pages project of the landing page (free, at godot-wingman.pages.dev).
-// Deploy from this folder with: bunx wrangler pages deploy public --project-name godot-wingman --branch main
+// Deploy from this folder with: bun run deploy
 {
   "name": "godot-wingman",
-  "pages_build_output_dir": "./public",
+  "pages_build_output_dir": "./out",
   "compatibility_date": "2026-11-01"
 }
