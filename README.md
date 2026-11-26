@@ -39,7 +39,9 @@ Every push to `main` builds the site and uploads it to Cloudflare Pages
 - Every statement on the page must match the [Godot Wingman README](https://github.com/Godot-Wingman/godot-wingman#readme).
 - The screenshots in `public/images` are real: they were taken through Godot Wingman's own tools.
 
-## Credits
+## License and credits
+
+The site code is under the [GNU AGPL-3.0](LICENSE), like Godot Wingman. The logos and game art below belong to their owners and keep their own terms.
 
 - Wing shape: "Feathered wing" by Lorc, [game-icons.net](https://game-icons.net), CC BY 3.0.
 - Game art in the screenshots: [Pixel Platformer](https://kenney.nl/assets/pixel-platformer) by Kenney, CC0.
