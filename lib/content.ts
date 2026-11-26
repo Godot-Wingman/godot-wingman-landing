@@ -2,40 +2,57 @@
  * Facts shown on the page, kept in one place so they are easy to check against the
  * Godot Wingman README. Only verified statements belong here.
  */
-import {
-  type SimpleIcon,
-  siClaude,
-  siCursor,
-  siGithubcopilot,
-  siGodotengine,
-  siGooglegemini,
-  siOpenai,
-  siWindsurf,
-} from "simple-icons";
+import { siClaude, siGithubcopilot, siOpenai } from "simple-icons";
 
 export const VERSION = "0.4.1";
 export const REPOSITORY_URL = "https://github.com/Albis0/godot-wingman";
 export const INSTALL_GUIDE_URL = `${REPOSITORY_URL}/blob/main/docs/INSTALL.md`;
 export const CHANGELOG_URL = `${REPOSITORY_URL}/blob/main/CHANGELOG.md`;
 
-export const GODOT_LOGO: SimpleIcon = siGodotengine;
+/**
+ * How an app's icon is drawn, in its own colors: a full official tile (an image file in
+ * public/logos), an official symbol on a dark tile, or a one-color symbol (from Simple
+ * Icons) on a tile of the app's color.
+ */
+export type AppLogo =
+  | { kind: "tile-image"; src: string }
+  | { kind: "symbol-image"; src: string }
+  | { kind: "symbol-path"; path: string; color: string; tileColor?: string };
 
 export interface AiApp {
   name: string;
-  icon: SimpleIcon;
-  /** How Godot Wingman gets added to the app. */
-  setup: "installer" | "by hand";
+  logo: AppLogo;
 }
 
-/** The AI apps the installer sets up (and VS Code, which is set up per project). */
+/** The Godot logo (from the Godot press kit), used only to stand for Godot. */
+export const GODOT_LOGO: AppLogo = { kind: "symbol-image", src: "/logos/godot.svg" };
+
+/** The AI apps the installer sets up (and GitHub Copilot in VS Code, set up per project). */
 export const AI_APPS: AiApp[] = [
-  { name: "Claude Code", icon: siClaude, setup: "installer" },
-  { name: "Claude Desktop", icon: siClaude, setup: "installer" },
-  { name: "Codex", icon: siOpenai, setup: "installer" },
-  { name: "Cursor", icon: siCursor, setup: "installer" },
-  { name: "Gemini CLI", icon: siGooglegemini, setup: "installer" },
-  { name: "Windsurf", icon: siWindsurf, setup: "installer" },
-  { name: "VS Code Copilot", icon: siGithubcopilot, setup: "by hand" },
+  { name: "Claude Code", logo: { kind: "symbol-path", path: siClaude.path, color: "#D97757" } },
+  { name: "Claude Desktop", logo: { kind: "symbol-path", path: siClaude.path, color: "#D97757" } },
+  // The Codex app's own tile: the OpenAI symbol on its blue (#3143FF in the app's manifest).
+  {
+    name: "Codex",
+    logo: { kind: "symbol-path", path: siOpenai.path, color: "#FFFFFF", tileColor: "#3143FF" },
+  },
+  { name: "Cursor", logo: { kind: "tile-image", src: "/logos/cursor.svg" } },
+  { name: "Gemini CLI", logo: { kind: "symbol-image", src: "/logos/gemini.svg" } },
+  { name: "Windsurf", logo: { kind: "tile-image", src: "/logos/windsurf.svg" } },
+  { name: "GitHub Copilot", logo: { kind: "symbol-path", path: siGithubcopilot.path, color: "#FFFFFF" } },
+];
+
+/** Things to ask for, shown in the moving strip under the hero. */
+export const EXAMPLE_REQUESTS = [
+  "Make the player jump higher",
+  "Add a pause menu",
+  "Why does the game crash at level 2?",
+  "Play the level and tell me if it's too hard",
+  "Add a health bar to the HUD",
+  "Make the enemies patrol between two points",
+  "Paint grass on the top of the ground",
+  "Add a sound when a coin is collected",
+  "Export the game for the web",
 ];
 
 export interface Toolset {
@@ -150,30 +167,6 @@ export const TOOLSETS: Toolset[] = [
   },
 ];
 
-/** Real tool names, for the moving strip under the hero. */
-export const TOOL_NAMES = [
-  "create_project",
-  "take_editor_screenshot",
-  "add_node",
-  "set_properties",
-  "create_script",
-  "validate_script",
-  "run_game",
-  "input_sequence",
-  "take_game_screenshot",
-  "wait_until",
-  "paint_terrain",
-  "connect_signal",
-  "render_view",
-  "get_class_docs",
-  "tell_other_ais",
-  "step_frames",
-  "capture_frames",
-  "batch_edit",
-  "set_input_action",
-  "create_tileset",
-];
-
 export const INSTALL_COMMANDS = {
   windows: {
     label: "Windows",
@@ -199,97 +192,88 @@ export interface DemoStep {
   key: string;
   prompt: string;
   calls: DemoCall[];
+  /** How many more calls of the same kind ran in this step (not listed). */
+  moreCalls: number;
   image: string;
   imageAlt: string;
-  imageWidth: number;
-  imageHeight: number;
 }
 
-/** A real session: these calls ran against the editor and returned these results and images. */
+/**
+ * A real session building a small platformer with Kenney's Pixel Platformer art (CC0):
+ * these calls ran against the editor and returned these results and pictures.
+ */
 export const DEMO_STEPS: DemoStep[] = [
   {
     key: "1",
-    prompt: "Show me the level.",
+    prompt: "Build a level with the Kenney tiles in art/.",
     calls: [
       {
-        tool: "set_main_screen",
-        input: '{"screen": "2D"}',
-        result: '{"main_screen": "2D"}',
+        tool: "create_scene",
+        input: '{"path": "res://main.tscn"}',
+        result: '{"created": "res://main.tscn"}',
       },
       {
-        tool: "take_editor_screenshot",
-        input: '{"view": "2d"}',
-        result: "2d view, 1490x748",
+        tool: "create_tileset",
+        input: '{"texture": "res://art/tiles.png", "tile_size": [18, 18], "collision": true}',
+        result: '{"tiles": 180, "assigned_to": "Ground"}',
       },
+      { tool: "set_tiles", input: '{"node_path": "Ground", "rectangles": [...]}', result: '{"placed": 372}' },
+      { tool: "take_editor_screenshot", input: '{"view": "2d"}', result: "2d view, 1490x932" },
     ],
+    moreCalls: 11,
     image: "/images/level.png",
     imageAlt:
-      "The level of a small platformer rendered by the Godot editor: two ground blocks with a gap, floating platforms and coins.",
-    imageWidth: 1490,
-    imageHeight: 748,
+      "The level in the Godot editor: grass and dirt ground with a gap, floating platforms, trees and clouds (cropped from the screenshot).",
   },
   {
     key: "2",
-    prompt: "Put three coins over the gap and make the camera follow the player.",
+    prompt: "Add a player that runs and jumps, coins and a score. Then play it.",
     calls: [
+      {
+        tool: "create_script",
+        input: '{"path": "res://player.gd", "attach_to": "Player"}',
+        result: '{"valid": true}',
+      },
       {
         tool: "add_node",
-        input:
-          '{"type": "Camera2D", "parent_path": "Player", "properties": {"zoom": [3, 3], "position_smoothing_enabled": true}}',
-        result: '{"added": "Player/Camera2D"}',
+        input: '{"type": "res://coin.tscn", "name": "Coin2"}',
+        result: '{"added": "Coin2"}',
       },
-      {
-        tool: "duplicate_node",
-        input: '{"node_path": "Coin6", "new_name": "Coin7"}',
-        result: '{"duplicate": "Coin7"}',
-      },
-      {
-        tool: "set_properties",
-        input: '{"node_path": "Coin7", "properties": {"position": [312, 284]}}',
-        result: '{"changed": {"position": "Vector2(312, 284)"}}',
-      },
-      {
-        tool: "save_scene",
-        input: "{}",
-        result: '{"saved": "res://main.tscn"}',
-      },
-      {
-        tool: "take_editor_screenshot",
-        input: '{"view": "2d"}',
-        result: "2d view, 1490x762",
-      },
-    ],
-    image: "/images/level-coins.png",
-    imageAlt: "The same level after the change, with three new coins in an arc over the gap.",
-    imageWidth: 1490,
-    imageHeight: 762,
-  },
-  {
-    key: "3",
-    prompt: "Play it and jump over the gap.",
-    calls: [
-      {
-        tool: "run_game",
-        input: "{}",
-        result: '{"running": true, "scene": "main"}',
-      },
+      { tool: "run_game", input: "{}", result: '{"running": true, "scene": "main"}' },
       {
         tool: "input_sequence",
         input:
-          '{"steps": [{"press": "action:move_right"}, {"wait_until": "node(\\"Player\\").position.x > 286"}, {"tap": "action:jump"}, {"wait_seconds": 0.22}]}',
+          '{"steps": [{"press": "action:move_right"}, {"wait_until": "…x > 286"}, {"tap": "action:jump"}]}',
         result:
-          '{"performed": ["pressed action:move_right", "waited until node(\\"Player\\").position.x > 286 (2.07s)", "tapped action:jump", "waited 0.22s"]}',
-      },
-      {
-        tool: "take_game_screenshot",
-        input: "{}",
-        result: "Game view 1280x720",
+          '{"performed": ["pressed action:move_right", "waited until … (2.26s)", "tapped action:jump"]}',
       },
     ],
-    image: "/images/game-jump.png",
+    moreCalls: 32,
+    image: "/images/game-coins.png",
     imageAlt:
-      "The running game in the middle of the jump over the gap, with the counter showing 3 of 9 coins.",
-    imageWidth: 1280,
-    imageHeight: 720,
+      "The running game: the green character in the middle of a jump over a gap, the score shows 3 of 9 coins.",
+  },
+  {
+    key: "3",
+    prompt: "Let the player jump twice in the air.",
+    calls: [
+      {
+        tool: "edit_script",
+        input:
+          '{"path": "res://player.gd", "old_text": "…and is_on_floor():", "new_text": "…and jumps_left > 0:"}',
+        result: '{"valid": true}',
+      },
+      { tool: "validate_script", input: '{"path": "res://player.gd"}', result: '{"valid": true}' },
+      { tool: "run_game", input: "{}", result: '{"running": true}' },
+      {
+        tool: "input_sequence",
+        input:
+          '{"steps": [{"press": "action:move_right"}, …, {"tap": "action:jump"}, {"wait_seconds": 0.32}, {"tap": "action:jump"}]}',
+        result: '{"performed": ["tapped action:jump", "waited 0.32s", "tapped action:jump"]}',
+      },
+    ],
+    moreCalls: 3,
+    image: "/images/game-double-jump.png",
+    imageAlt: "The running game: after two jumps the character is high above the platforms, next to a cloud.",
   },
 ];

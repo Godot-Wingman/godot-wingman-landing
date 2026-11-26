@@ -1,5 +1,5 @@
 /**
- * The landing page: hero with a real editor screenshot, a strip of tool names, the key
+ * The landing page: hero with a real editor screenshot, a strip of example requests, the key
  * demo, how the apps connect, install, and the README-style technical part.
  */
 import { AppHub } from "@/components/AppHub";
@@ -7,7 +7,7 @@ import { Docs } from "@/components/Docs";
 import { Header } from "@/components/Header";
 import { Install } from "@/components/Install";
 import { KeyDemo } from "@/components/KeyDemo";
-import { REPOSITORY_URL, TOOL_NAMES, VERSION } from "@/lib/content";
+import { EXAMPLE_REQUESTS, REPOSITORY_URL, VERSION } from "@/lib/content";
 
 export default function Home() {
   return (
@@ -39,10 +39,10 @@ export default function Home() {
           <div className="wrap hero__shot">
             {/* biome-ignore lint/performance/noImgElement: static export, images are served as they are. */}
             <img
-              src="/images/editor-coins.png"
+              src="/images/editor.png"
               width={1920}
               height={1057}
-              alt="The Godot editor with the Godot Wingman panel at the bottom, listing the changes an AI made to a small platformer."
+              alt="The Godot editor with a small platformer made with Kenney art, and the Godot Wingman panel at the bottom listing the script changes an AI made."
             />
             <p className="caption">
               A real screenshot: the Godot editor, and the Wingman panel listing what the AI did.
@@ -52,8 +52,8 @@ export default function Home() {
 
         <div className="strip" aria-hidden="true">
           <div className="strip__track">
-            {[...TOOL_NAMES, ...TOOL_NAMES].map((name, index) => (
-              <span key={`${name}-${index < TOOL_NAMES.length ? "a" : "b"}`}>{name}</span>
+            {[...EXAMPLE_REQUESTS, ...EXAMPLE_REQUESTS].map((request, index) => (
+              <span key={`${request}-${index < EXAMPLE_REQUESTS.length ? "a" : "b"}`}>“{request}”</span>
             ))}
           </div>
         </div>
@@ -69,11 +69,29 @@ export default function Home() {
         </section>
 
         <section id="how" className="section">
-          <div className="wrap">
-            <h2 className="title">
-              One server between your AI and Godot.
-              <span className="title__second"> Everything stays on your computer.</span>
-            </h2>
+          <div className="wrap how">
+            <div className="how__text">
+              <h2 className="title">
+                One server between your AI and Godot.
+                <span className="title__second"> Everything stays on your computer.</span>
+              </h2>
+              <ul className="how__facts">
+                <li>
+                  <strong>Your AI app starts it.</strong> It talks to Godot Wingman over MCP, like to any
+                  other MCP server.
+                </li>
+                <li>
+                  <strong>The addon opens the editor to it.</strong> Only on 127.0.0.1, and only with a secret
+                  token.
+                </li>
+                <li>
+                  <strong>Several AIs, one editor.</strong> They tell each other what they are changing.
+                </li>
+                <li>
+                  <strong>Nothing leaves your computer.</strong> No accounts, no cloud, no telemetry.
+                </li>
+              </ul>
+            </div>
             <AppHub />
           </div>
         </section>
@@ -120,8 +138,9 @@ export default function Home() {
           </p>
           <p>
             Wing shape: “Feathered wing” by Lorc,{" "}
-            <a href="https://game-icons.net/1x1/lorc/feathered-wing.html">game-icons.net</a>, CC BY 3.0.
-            Logos: Simple Icons. No tracking on this page.
+            <a href="https://game-icons.net/1x1/lorc/feathered-wing.html">game-icons.net</a>, CC BY 3.0. Game
+            art: “Pixel Platformer” by Kenney, CC0. App logos come from their makers and Simple Icons. No
+            tracking on this page.
           </p>
           <p>
             <a href={REPOSITORY_URL}>GitHub</a> · GNU AGPL-3.0

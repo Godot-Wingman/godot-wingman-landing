@@ -5,7 +5,7 @@
  */
 import { useState } from "react";
 import { INSTALL_COMMANDS } from "@/lib/content";
-import { Wing } from "./WingMark";
+import { LetterW, Wing } from "./WingMark";
 
 type Platform = keyof typeof INSTALL_COMMANDS;
 
@@ -43,9 +43,7 @@ export function Install() {
   return (
     <div className="wings">
       <CommandPanel platform="windows" side="left" />
-      <span className="wings__letter" aria-hidden="true">
-        W
-      </span>
+      <LetterW className="wings__letter" />
       <CommandPanel platform="unix" side="right" />
     </div>
   );

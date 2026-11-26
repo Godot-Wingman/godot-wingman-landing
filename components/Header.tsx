@@ -6,7 +6,7 @@
  */
 import { useEffect, useRef } from "react";
 import { REPOSITORY_URL } from "@/lib/content";
-import { WingMark } from "./WingMark";
+import { LogoTile } from "./WingMark";
 
 /** How many pixels of scrolling it takes for the word to reach the bar. */
 const SHRINK_DISTANCE = 360;
@@ -64,7 +64,7 @@ export function Header() {
       <header className="topbar">
         <div className="topbar__inner">
           <a className="topbar__home" href="#top" aria-label="Godot Wingman, back to the top">
-            <WingMark className="topbar__mark" />
+            <LogoTile className="topbar__mark" />
             <span ref={slotRef} className="topbar__slot" aria-hidden="true">
               WINGMAN
             </span>

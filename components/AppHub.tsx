@@ -1,33 +1,50 @@
 /**
  * "How it works" picture: the AI apps sit on an arc, each one connects to Godot Wingman
- * in the middle, and Godot Wingman connects to the Godot editor below. Logos are the apps'
- * own (from Simple Icons); the lines carry a slow flow toward the editor.
+ * in the middle, and Godot Wingman connects to the Godot editor below. Every app is shown
+ * with its own icon in its own colors; the lines carry a slow flow toward the editor.
  */
-import type { SimpleIcon } from "simple-icons";
-import { AI_APPS, GODOT_LOGO } from "@/lib/content";
-import { WingMark } from "./WingMark";
+import { AI_APPS, type AppLogo, GODOT_LOGO } from "@/lib/content";
+import { LogoTile } from "./WingMark";
 
 const WIDTH = 1000;
-const HEIGHT = 640;
-const HUB = { x: 500, y: 380 };
-const GODOT = { x: 500, y: 578 };
+const HEIGHT = 730;
+const HUB = { x: 500, y: 450 };
+const GODOT = { x: 500, y: 660 };
 
 function placeOnArc(index: number, count: number) {
-  const startDegrees = 204;
-  const endDegrees = 336;
+  const startDegrees = 198;
+  const endDegrees = 342;
   const degrees = startDegrees + ((endDegrees - startDegrees) * index) / (count - 1);
   const radians = (degrees * Math.PI) / 180;
-  return {
-    x: HUB.x + 410 * Math.cos(radians),
-    y: HUB.y + 300 * Math.sin(radians),
-  };
+  return { x: HUB.x + 440 * Math.cos(radians), y: HUB.y + 370 * Math.sin(radians) };
 }
 
-function BrandIcon({ icon }: { icon: SimpleIcon }) {
+export function AppIcon({ logo }: { logo: AppLogo }) {
+  if (logo.kind === "tile-image") {
+    return (
+      <span className="app-icon app-icon--image">
+        {/* biome-ignore lint/performance/noImgElement: static export, images are served as they are. */}
+        <img src={logo.src} alt="" />
+      </span>
+    );
+  }
+  if (logo.kind === "symbol-image") {
+    return (
+      <span className="app-icon">
+        {/* biome-ignore lint/performance/noImgElement: static export, images are served as they are. */}
+        <img className="app-icon__symbol" src={logo.src} alt="" />
+      </span>
+    );
+  }
   return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path fill="currentColor" d={icon.path} />
-    </svg>
+    <span
+      className="app-icon"
+      style={logo.tileColor ? { background: logo.tileColor, borderColor: logo.tileColor } : undefined}
+    >
+      <svg className="app-icon__symbol" viewBox="0 0 24 24" aria-hidden="true">
+        <path fill={logo.color} d={logo.path} />
+      </svg>
+    </span>
   );
 }
 
@@ -49,17 +66,11 @@ export function AppHub() {
             x1={place.x}
             y1={place.y}
             x2={HUB.x}
-            y2={HUB.y - 40}
+            y2={HUB.y}
             style={{ animationDelay: `${index * -0.37}s` }}
           />
         ))}
-        <line
-          className="hub__line hub__line--down"
-          x1={HUB.x}
-          y1={HUB.y + 44}
-          x2={GODOT.x}
-          y2={GODOT.y - 40}
-        />
+        <line className="hub__line hub__line--down" x1={HUB.x} y1={HUB.y} x2={GODOT.x} y2={GODOT.y} />
       </svg>
 
       {AI_APPS.map((app, index) => {
@@ -67,38 +78,22 @@ export function AppHub() {
         return (
           <div
             key={app.name}
-            className="hub__app"
+            className="hub__node"
             style={{ left: percentX(place.x), top: percentY(place.y) }}
           >
-            <span className="hub__icon" style={{ "--brand": `#${app.icon.hex}` } as React.CSSProperties}>
-              <BrandIcon icon={app.icon} />
-            </span>
+            <AppIcon logo={app.logo} />
             <span className="hub__name">{app.name}</span>
           </div>
         );
       })}
 
-      <div className="hub__center" style={{ left: percentX(HUB.x), top: percentY(HUB.y) }}>
-        <WingMark className="hub__mark" />
-        <span className="hub__center-name">Godot Wingman</span>
+      <div className="hub__node hub__node--center" style={{ left: percentX(HUB.x), top: percentY(HUB.y) }}>
+        <LogoTile className="hub__logo" />
+        <span className="hub__name hub__name--strong">Godot Wingman</span>
       </div>
-      <span
-        className="hub__tag hub__tag--mcp"
-        style={{ left: percentX(HUB.x + 14), top: percentY(HUB.y - 92) }}
-      >
-        MCP · stdio
-      </span>
-      <span
-        className="hub__tag hub__tag--socket"
-        style={{ left: percentX(HUB.x + 14), top: percentY(HUB.y + 92) }}
-      >
-        WebSocket · 127.0.0.1 · token
-      </span>
 
-      <div className="hub__godot" style={{ left: percentX(GODOT.x), top: percentY(GODOT.y) }}>
-        <span className="hub__icon hub__icon--godot">
-          <BrandIcon icon={GODOT_LOGO} />
-        </span>
+      <div className="hub__node" style={{ left: percentX(GODOT.x), top: percentY(GODOT.y) }}>
+        <AppIcon logo={GODOT_LOGO} />
         <span className="hub__name">Godot editor + addon</span>
       </div>
     </figure>

@@ -2,13 +2,14 @@
 /**
  * The demo: pressing 1, 2 or 3 (or clicking the keys) shows one step of a real session,
  * the request, the tool calls with their results, and the picture the tools returned.
+ * All steps stay in the page, stacked in the same place, and fade into each other, so
+ * nothing jumps when the step changes. Pictures sit in one 16:9 frame.
  */
 import { useEffect, useState } from "react";
 import { DEMO_STEPS } from "@/lib/content";
 
 export function KeyDemo() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const step = DEMO_STEPS[activeIndex] ?? DEMO_STEPS[0];
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -22,42 +23,59 @@ export function KeyDemo() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
 
-  if (!step) return null;
   return (
     <div className="demo">
       <div className="demo__stage">
-        <div className="demo__chat" key={`chat-${step.key}`}>
-          <p className="demo__prompt">
-            <span className="demo__you">You</span>
-            {step.prompt}
-          </p>
-          <ol className="demo__calls">
-            {step.calls.map((call) => (
-              <li key={`${call.tool}-${call.input}`} className="demo__call">
-                <code className="demo__tool">{call.tool}</code>
-                <code className="demo__input">{call.input}</code>
-                <code className="demo__result">→ {call.result}</code>
-              </li>
-            ))}
-          </ol>
+        <div className="demo__chats">
+          {DEMO_STEPS.map((step, index) => (
+            <div
+              key={step.key}
+              className="demo__chat"
+              data-active={index === activeIndex}
+              aria-hidden={index !== activeIndex}
+            >
+              <p className="demo__prompt">
+                <span className="demo__you">You</span>
+                {step.prompt}
+              </p>
+              <ol className="demo__calls">
+                {step.calls.map((call) => (
+                  <li key={`${call.tool}-${call.input}`} className="demo__call">
+                    <code className="demo__tool">{call.tool}</code>
+                    <code className="demo__input">{call.input}</code>
+                    <code className="demo__result">→ {call.result}</code>
+                  </li>
+                ))}
+              </ol>
+              <p className="demo__more">+ {step.moreCalls} more calls in this step</p>
+            </div>
+          ))}
         </div>
-        <figure className="demo__picture" key={`picture-${step.key}`}>
-          {/* biome-ignore lint/performance/noImgElement: static export, images are served as they are. */}
-          <img src={step.image} alt={step.imageAlt} width={step.imageWidth} height={step.imageHeight} />
-        </figure>
+        <div className="demo__frame">
+          {DEMO_STEPS.map((step, index) => (
+            // biome-ignore lint/performance/noImgElement: static export, images are served as they are.
+            <img
+              key={step.key}
+              src={step.image}
+              alt={step.imageAlt}
+              data-active={index === activeIndex}
+              aria-hidden={index !== activeIndex}
+            />
+          ))}
+        </div>
       </div>
       <div className="demo__keys" role="tablist" aria-label="Demo steps">
-        {DEMO_STEPS.map((demoStep, index) => (
+        {DEMO_STEPS.map((step, index) => (
           <button
-            key={demoStep.key}
+            key={step.key}
             type="button"
             role="tab"
             aria-selected={index === activeIndex}
             className="keycap"
             onClick={() => setActiveIndex(index)}
           >
-            <span className="keycap__key">{demoStep.key}</span>
-            <span className="keycap__label">{demoStep.prompt}</span>
+            <span className="keycap__key">{step.key}</span>
+            <span className="keycap__label">{step.prompt}</span>
           </button>
         ))}
       </div>
