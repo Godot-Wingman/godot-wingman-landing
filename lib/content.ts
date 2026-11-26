@@ -4,7 +4,7 @@
  */
 import { siClaude, siGithubcopilot, siOpenai } from "simple-icons";
 
-export const VERSION = "0.4.1";
+export const VERSION = "0.4.2";
 export const REPOSITORY_URL = "https://github.com/Albis0/godot-wingman";
 export const INSTALL_GUIDE_URL = `${REPOSITORY_URL}/blob/main/docs/INSTALL.md`;
 export const CHANGELOG_URL = `${REPOSITORY_URL}/blob/main/CHANGELOG.md`;
